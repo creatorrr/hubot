@@ -105,16 +105,6 @@ callback function that accepts a request and a response.
 In addition, if you set `EXPRESS_STATIC`, the HTTP listener will serve static
 files from this directory.
 
-Also, set `EXPRESS_SOCKETS` to true to setup sokect.io; you can configure it in your scripts using the `io` property on `robot`.
-
-```coffeescript
-module.exports = (robot) ->
-  io = robot.router.io
-  io.sockets.on 'connection', (socket) ->
-    socket.emit 'news', hello: 'world'
-    socket.on 'event', (data) -> console.log data
-```
-
 ## Events
 
 Hubot has also an node.js [EventEmitter][event-emitter] attached. It can be used
@@ -151,9 +141,10 @@ used to store and retrieve data by scripts.
 
 ```coffeescript
 module.exports = (robot) ->
+
   robot.respond /have a beer/i, (msg) ->
     # Get number of beers had (coerced to a number).
-    beersHad = (robot.brain.get 'totalBeers')*1 or 0
+    beersHad = robot.brain.get('totalBeers') * 1 or 0
     
     if beersHad > 4
       msg.respond "I'm too drunk.."
@@ -163,7 +154,6 @@ module.exports = (robot) ->
       
       robot.brain.set 'totalBeers', beersHad+1
       # Or robot.brain.set totalBeers: beersHad+1
-      
 ```
 
 Look in [storage.coffee](src/scripts/storage.coffee) for more examples.
@@ -172,9 +162,12 @@ You may also install the script `redis-brain.coffee`
 (instructions [here](https://github.com/github/hubot-scripts/blob/master/src/scripts/redis-brain.coffee))
 for persisting the key-value store in a redis database.
 
-If the script needs to store user data, `robot.brain` has a built-in interface for it.
+If the script needs to store user data, `robot.brain` has a built-in interface
+for it.
+
 ```coffeescript
 module.exports = (robot) ->
+
   robot.respond /who is @?([\w .\-]+)\?*$/i, (msg) ->
     name = msg.match[1].trim()
 
@@ -183,7 +176,7 @@ module.exports = (robot) ->
       user = users[0]
       # Do something interesting here..
 
-      msg.send "#{ name } is user - #{ user }"
+      msg.send "#{name} is user - #{user}"
 ```
 
 More examples in [roles.coffee](src/scripts/roles.coffee)
